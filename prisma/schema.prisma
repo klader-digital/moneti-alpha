@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @unique @default(cuid())
+  email         String    @unique
+  password_hash String
+  sessions      Session[]
+  stores        Store[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Store {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?   @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+
+  webflowApiKey        String?  @map(name: "webflow_api_key")
+  webflowSiteId        String?  @unique @map(name: "webflow_site_id")
+  stripeSecretLiveKey  String?  @map(name: "stripe_secret_live_key")
+  enableStripeTestMode Boolean? @map(name: "enable_stripe_test_mode")
+  stripeSecretTestKey  String?  @map(name: "stripe_test_test_key")
+
+  name     String
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id      String  @id @default(cuid())
+  Store   Store?  @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  storeId String?
+
+  name     String
+  image    String
+  price    Int
+  currency String
+
+  webflowSkuId    String @unique @map(name: "webflow_sku_id")
+  stripePriceId   String @map(name: "stripe_price_id")
+  stripeProductId String @map(name: "stripe_product_id")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
