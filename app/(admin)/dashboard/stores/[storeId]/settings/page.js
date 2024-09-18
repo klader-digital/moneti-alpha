@@ -1,7 +1,8 @@
 import {validateRequest} from "@/actions/auth";
 import {redirect} from "next/navigation";
-import {GET_STORE_BY_USER_ID_AND_STORE_ID} from "@/app/(admin)/dashboard/stores/actions";
+import {GET_STORE_BY_USER_ID_AND_STORE_ID} from "./../../actions";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
+import UpdateStoreForm from "./../../update-store-form";
 
 export default async function Page({params}) {
     const {user} = await validateRequest();
@@ -22,6 +23,7 @@ export default async function Page({params}) {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
+                    <UpdateStoreForm store={store} />
                 </CardContent>
             </Card>
 

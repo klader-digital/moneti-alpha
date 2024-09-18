@@ -69,5 +69,5 @@ model Product {
   stripeProductId String @map(name: "stripe_product_id")
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime
 }

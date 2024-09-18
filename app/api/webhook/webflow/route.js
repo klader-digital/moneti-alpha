@@ -79,7 +79,7 @@ async function handleProductCreateOrUpdate({ webflowSku, stripe, store, payload 
     });
 
     if (existingProduct && existingProduct.updatedAt && new Date(existingProduct.updatedAt).getTime() >= new Date(payload.lastUpdated).getTime()) {
-        return; // No update needed
+        throw new Error('Product is already up-to-date');
     }
 
     // CREATE_STRIPE_PRODUCT

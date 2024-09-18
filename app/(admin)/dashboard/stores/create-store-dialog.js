@@ -27,7 +27,7 @@ import {toast} from "@/hooks/use-toast";
 import {Checkbox} from "@/components/ui/checkbox";
 import {CREATE_STORE} from "./actions";
 
-export const storeSchema = z.object({
+const storeSchema = z.object({
     webflowApiKey: z.string().min(1, "Please enter a valid Webflow API key"),
     stripeSecretLiveKey: z.string().optional(),
     enableStripeTestMode: z.boolean().optional(),

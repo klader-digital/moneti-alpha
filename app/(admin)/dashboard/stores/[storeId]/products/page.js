@@ -14,7 +14,9 @@ export default async function Page({params}) {
     return (
         <main>
 
-            {store.products.map(product => (
+            {store.products.length === 0 ? (
+                <p>No products found</p>
+            ) : store.products.map(product => (
                 <div key={product.id}>
                     <h2>{product.name}</h2>
                     <p>{product.description}</p>

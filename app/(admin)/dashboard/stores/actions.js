@@ -5,6 +5,7 @@ import {WebflowClient} from "webflow-api";
 import {GET_WEBFLOW_SITE} from "@/lib/webflow";
 import {revalidatePath} from "next/cache";
 import prisma from "@/lib/prisma";
+import Stripe from "stripe";
 
 export async function CREATE_STORE(payload) {
     const {user} = await validateRequest();
@@ -51,7 +52,7 @@ export async function CREATE_STORE(payload) {
     revalidatePath('/dashboard/store');
 }
 
-export async function UPDATE_STORE(storeId, payload) {
+export async function UPDATE_STORE(payload, storeId) {
     const {user} = await validateRequest();
 
     if (!user) {
@@ -74,7 +75,9 @@ export async function UPDATE_STORE(storeId, payload) {
             id: storeId,
         },
         data: {
-            ...payload,
+            enableStripeTestMode: payload.enableStripeTestMode,
+            stripeSecretLiveKey: payload.stripeSecretLiveKey,
+            stripeSecretTestKey: payload.stripeSecretTestKey,
         },
     });
 
