@@ -42,7 +42,7 @@ export async function CREATE_STORE(payload) {
         for (const webhook of webhooks) {
             await webflow.webhooks.create(id, {
                 triggerType: webhook,
-                url: `https://webhook.site/1ae4c376-57e2-41a4-89a7-77031b97417b`,
+                url: `${process.env.NEXT_PUBLIC_APP_URL}/api/webhook/webflow/`,
             });
         }
     } catch (error) {
